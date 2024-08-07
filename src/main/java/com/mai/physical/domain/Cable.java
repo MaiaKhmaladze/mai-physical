@@ -1,14 +1,17 @@
 package com.mai.physical.domain;
 
+
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,7 +36,7 @@ public class Cable
     )
     private Long objectId;
 
-    @Column(name="NAME", columnDefinition = "varchar")
+    @Column(name="NAME", columnDefinition = "varchar", unique = true)
     private String name;
 
     @Column(name="STATUS", columnDefinition = "varchar")
@@ -43,9 +46,11 @@ public class Cable
     private String type;
 
     @Column(name="NUMBER_OF_PAIRS", columnDefinition = "int4")
+    @PositiveOrZero
     private Long numberOfPairs;
 
     @Column(name="NUMBER_OF_PAIRS_IN_USE", columnDefinition = "int4")
+    @PositiveOrZero
     private Long numberOfPairsInUse;
 
     @Column(name="ASIDE_TERM_STATE", columnDefinition = "varchar")
@@ -77,6 +82,16 @@ public class Cable
     @Version
     @Column(name="VERSION", columnDefinition = "int8")
     private Long version;
+
+    @OneToMany
+    @Cascade({CascadeType.ALL})
+    private Set<CableBinding> cableToPair;
+
+    @OneToOne
+    private CableBinding cableToZSite;
+
+    @OneToOne
+    private CableBinding cableToASite;
 }
 
 

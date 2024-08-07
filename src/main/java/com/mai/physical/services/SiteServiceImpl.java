@@ -1,5 +1,6 @@
 package com.mai.physical.services;
 
+import com.mai.physical.domain.Cable;
 import com.mai.physical.domain.Site;
 import com.mai.physical.model.SitePagedList;
 import com.mai.physical.repositories.SiteRepository;
@@ -68,6 +69,7 @@ public class SiteServiceImpl implements SiteService
     @Override
     public void deleteSite( Long id )
     {
+        Site site = siteRepository.findById(id).orElseThrow(NotFoundException::new);
         siteRepository.deleteById(id);
     }
 }

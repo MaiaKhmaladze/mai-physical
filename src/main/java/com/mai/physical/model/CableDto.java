@@ -1,10 +1,5 @@
 package com.mai.physical.model;
 
-import com.mai.physical.domain.CableToASiteBinding;
-import com.mai.physical.domain.CableToPairBinding;
-import com.mai.physical.domain.CableToZSiteBinding;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -12,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import java.util.Set;
 
@@ -21,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SiteDto
+public class CableDto extends BaseDto
 {
     static final long serialVersionUID = 0;
 
@@ -37,9 +30,17 @@ public class SiteDto
     @NotNull
     private String type;
 
-    private Set<CableToPairBinding> cableToPair;
+    private Long numberOfPairs;
 
-    private CableToZSiteBinding cableToZSite;
+    private Long numberOfPairsInUse;
 
-    private CableToASiteBinding cableToASite;
+    private String aSideTermState;
+
+    private String zSideTermState;
+
+    private SiteDto cableToZSite;
+
+    private SiteDto cableToASite;
+
+    private Set<PairDto> pairs;
 }

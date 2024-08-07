@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,7 +20,7 @@ import java.sql.Timestamp;
 public class Pair
 {
     @Id
-    @Column(name="PAIR_STRAND_INST_ID")
+    @Column(name="PAIR_INST_ID")
     @GeneratedValue(generator = "sequence-generator")
     @GenericGenerator(
             name = "sequence-generator",
@@ -41,17 +42,14 @@ public class Pair
     @Column(name="TYPE", columnDefinition = "varchar")
     private String type;
 
+    @Column(name="COLOR", columnDefinition = "varchar")
+    private String color;
+
     @Column(name="ACTIVE_CONSUMING_TRAIL", columnDefinition = "varchar")
     private String activeConsumingTrail;
 
     @Column(name="ACTIVE_CONSUMING_TRAIL_ID", columnDefinition = "int8")
     private Long activeConsumingTrailId;
-
-    @Column(name="NUMBER_OF_PAIRS", columnDefinition = "int4")
-    private Long numberOfPairs;
-
-    @Column(name="NUMBER_OF_PAIRS_IN_USE", columnDefinition = "int4")
-    private Long numberOfPairsInUse;
 
     @Column(name="ASIDE_TERM_STATE", columnDefinition = "varchar")
     private String aSideTermState;
@@ -82,6 +80,11 @@ public class Pair
     @Version
     @Column(name="VERSION", columnDefinition = "int8")
     private Long version;
+
+    @OneToMany
+    @JoinColumn(name="OWNER_ID", nullable=false)
+    private Set<PairToCableBinding> cables;
+
 }
 
 
