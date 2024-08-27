@@ -16,12 +16,18 @@ public abstract class PairMapperDecorator implements PairMapper {
     @Override
     public PairDto pairToPairDto( Pair pair) {
         PairDto dto = mapper.pairToPairDto(pair);
+        Long pairId = pair.getObjectId();
+        dto.getCables().parallelStream().forEach(c -> c.setOwnerId(pairId));
         dto.setId(pair.getObjectId());
         return dto;
     }
 
-    @Override
-    public Pair pairDtoToPair( PairDto pairDto) {
-        return mapper.pairDtoToPair(pairDto);
-    }
+   /* @Override
+    public PairDto pairDtoToPair( PairDto pairDto) {
+        Pair pair = mapper.pairDtoToPair(pairDto);
+        pair.
+        dto.setId(pair.getObjectId());
+        return dto;
+    }*/
+
 }
