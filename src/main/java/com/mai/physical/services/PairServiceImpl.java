@@ -1,6 +1,8 @@
 package com.mai.physical.services;
 
 import com.mai.physical.domain.Pair;
+import com.mai.physical.events.PairBindingEvent;
+import com.mai.physical.model.PairBindingDto;
 import com.mai.physical.model.PairDto;
 import com.mai.physical.model.PairPagedList;
 import com.mai.physical.repositories.PairRepository;
@@ -8,24 +10,27 @@ import com.mai.physical.web.mappers.PairMapper;
 import com.mai.sdk.QueryParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional(readOnly = false)
 @RequiredArgsConstructor
 public class PairServiceImpl implements PairService
 {
     private final PairRepository pairRepository;
     private final PairMapper pairMapper;
 
-    private final PairService pairService;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     public PairDto getPairById( Long id )
@@ -57,22 +62,35 @@ public class PairServiceImpl implements PairService
     }
 
     @Override
-    @Query(value = "SELECT p FROM Pair p JOIN p.cables.targetId=:cableId and p.cables.ownerId=p.id")
-    public List findPairsByCableId( Long cableId);
+    public PairPagedList findPairsByCableId( Long cableId, PageRequest pageRequest)
     {
-        Pair pair = Pair.builder().build();
-        Pair pair = pairRepository.findAll()ById(id).orElseThrow(NotFoundException::new);
-        pair.setName(pairDto.getName());
-        pair.setStatus(pairDto.getStatus());
-        pair.setType(pairDto.getType());
+        PairPagedList pairPagedList;
+        Page<Pair> pairPage;
 
-        return pairMapper.pairToPairDto(pairRepository.save(pair));
+        /*pairPage =  pairRepository.findAllByCable_TargetId(cableId, pageRequest);
+
+        pairPagedList = new PairPagedList(pairPage
+                .getContent()
+                .stream()
+                .map(pairMapper::pairToPairDto)
+                .collect(Collectors.toList()),
+                PageRequest
+                        .of(pairPage.getPageable().getPageNumber(),
+                                pairPage.getPageable().getPageSize()),
+                pairPage.getTotalElements());
+
+        return pairPagedList;*/
+return null;
     }
 
     @Override
     public PairDto createPair( PairDto pairDto )
     {
-        return pairMapper.pairToPairDto(pairRepository.save(pairMapper.pairDtoToPair(pairDto)));
+        Pair pair = pairMapper.pairDtoToPair(pairDto);
+        List<PairBindingDto> dd = pairDto.getCables();
+        PairDto persistedPair = pairMapper.pairToPairDto(pairRepository.save(pair));
+        eventPublisher.publishEvent(new PairBindingEvent(this, pairDto.getCables()));
+        return persistedPair;
     }
 
     @Override

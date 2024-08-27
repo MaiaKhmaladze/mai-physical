@@ -28,18 +28,12 @@ public class CableServiceImpl implements CableService
     private final CableRepository cableRepository;
     private final CableMapper cableMapper;
 
-    private final PairService pairService;
-
     @Override
     public CableDto getCableById( Long id )
     {
         Cable cable = cableRepository.findById(id).orElseThrow(NotFoundException::new);
         CableDto cableDto = cableMapper.cableToCableDto(cable);
-
-
-        Set<Long> pairIds = cable.getCableToPair().stream().forEach(p -> p.getTargetId()).collect(Collectors.toSet());
-        PairPagedList list = pairService.findPairsByIds(pairIds);
-        cableDto.getCableToASite();
+;
         return cableDto;
     }
 

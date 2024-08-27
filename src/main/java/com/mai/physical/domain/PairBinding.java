@@ -5,16 +5,16 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "OCI_PAIR_B")
-@MappedSuperclass
-public class PairBinding extends Binding
+public class PairBinding
 {
+    private static final String TABLE_NAME = "OCI_PAIR_B";
+
     @Id
     @Column(name="ID")
     @GeneratedValue(generator = "sequence-generator")
@@ -29,9 +29,23 @@ public class PairBinding extends Binding
     )
     private Long id;
 
-
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="PAIR_INST_ID", nullable=false)
+    @ManyToOne
+    @JoinColumn(name="OWNER_ID", columnDefinition = "int8", nullable=false)
     private Pair pair;
+
+    @Column(name="TARGET_ID", columnDefinition = "int8")
+    private Long targetId;
+
+    @Column(name="OWNER_TYPE", columnDefinition = "varchar")
+    private String ownerType;
+
+    @Column(name="TARGET_TYPE", columnDefinition = "varchar")
+    private String targetType;
+
+    @Column(name="BINDING_NAME", columnDefinition = "varchar")
+    private String bindingName;
+
+    @Column(name="SEQUENCE_ORDER", columnDefinition = "int4")
+    private Long sequenceOrder;
 
 }

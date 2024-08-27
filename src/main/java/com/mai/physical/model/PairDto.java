@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -37,4 +37,5 @@ public class PairDto extends BaseDto
 
     private String zSideTermState;
 
+    private List<PairBindingDto> cables;
 }

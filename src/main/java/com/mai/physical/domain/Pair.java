@@ -1,21 +1,21 @@
 package com.mai.physical.domain;
 
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+//@Builder
 @Entity
+@Data
 @Table(name = "OCI_PAIR")
 public class Pair
 {
@@ -33,7 +33,7 @@ public class Pair
     )
     private Long objectId;
 
-    @Column(name="NAME", columnDefinition = "varchar")
+    @Column(name="NAME", columnDefinition = "varchar", unique = true)
     private String name;
 
     @Column(name="STATUS", columnDefinition = "varchar")
@@ -81,10 +81,17 @@ public class Pair
     @Column(name="VERSION", columnDefinition = "int8")
     private Long version;
 
-    @OneToMany
-    @JoinColumn(name="OWNER_ID", nullable=false)
-    private Set<PairToCableBinding> cables;
+    @ToString.Exclude
+    @OneToMany(mappedBy = "pair",
+            cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<PairBinding> cables = new ArrayList<>();
 
+    public void setCables(final List<PairBinding> cables) {
+        this.cables = cables;
+        this.cables.forEach(c -> c.setPair(this));
+    }
+
+    //public String toString(Pair)
 }
 
 

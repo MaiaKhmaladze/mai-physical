@@ -1,10 +1,6 @@
 package com.mai.physical.model;
 
-import com.mai.physical.domain.CableToASiteBinding;
-import com.mai.physical.domain.CableToPairBinding;
-import com.mai.physical.domain.CableToZSiteBinding;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import com.mai.physical.domain.CableBinding;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -12,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import java.util.Set;
 
@@ -37,9 +31,9 @@ public class SiteDto
     @NotNull
     private String type;
 
-    private Set<CableToPairBinding> cableToPair;
+    private Set<CableBinding> cableToPair;
 
-    private CableToZSiteBinding cableToZSite;
+    private Set<CableBinding> cableToZSite;
 
-    private CableToASiteBinding cableToASite;
+    private Set<CableBinding> cableToASite;
 }

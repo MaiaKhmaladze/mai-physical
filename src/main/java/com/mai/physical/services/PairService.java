@@ -12,7 +12,7 @@ public interface PairService
     PairDto getPairById(Long id);
     PairPagedList findPairs( QueryParam[] params, PageRequest pageRequest);
 
-    PairPagedList findPairsByIds( Set<Long> ids);
+    PairPagedList findPairsByCableId(Long cableId, PageRequest pageRequest);
 
     PairDto createPair(PairDto pairDto);
 
