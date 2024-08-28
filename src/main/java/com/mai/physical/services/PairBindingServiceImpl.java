@@ -28,7 +28,7 @@ public class PairBindingServiceImpl implements PairBindingService
     {
         PairBinding binding = pairBindingRepository.findById(id).orElseThrow(NotFoundException::new);
         PairBindingDto pairBindingDto = pairBindingMapper.bindingToBindingDto(binding);
-;
+
         return pairBindingDto;
     }
 

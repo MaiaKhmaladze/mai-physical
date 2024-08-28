@@ -4,6 +4,9 @@ import com.mai.physical.domain.Pair;
 import com.mai.physical.model.PairDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collection;
+import java.util.Optional;
+
 public abstract class PairMapperDecorator implements PairMapper {
 
     private PairMapper mapper;
@@ -17,7 +20,6 @@ public abstract class PairMapperDecorator implements PairMapper {
     public PairDto pairToPairDto( Pair pair) {
         PairDto dto = mapper.pairToPairDto(pair);
         Long pairId = pair.getObjectId();
-        dto.getCables().parallelStream().forEach(c -> c.setOwnerId(pairId));
         dto.setId(pair.getObjectId());
         return dto;
     }

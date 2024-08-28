@@ -29,9 +29,8 @@ public class PairBinding
     )
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="OWNER_ID", columnDefinition = "int8", nullable=false)
-    private Pair pair;
+    @Column(name="OWNER_ID", columnDefinition = "int8", nullable=false)
+    private Long ownerId;
 
     @Column(name="TARGET_ID", columnDefinition = "int8")
     private Long targetId;

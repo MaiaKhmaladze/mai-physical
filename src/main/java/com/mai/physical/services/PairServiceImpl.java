@@ -87,8 +87,9 @@ return null;
     public PairDto createPair( PairDto pairDto )
     {
         Pair pair = pairMapper.pairDtoToPair(pairDto);
-        List<PairBindingDto> dd = pairDto.getCables();
         PairDto persistedPair = pairMapper.pairToPairDto(pairRepository.save(pair));
+        Long persistedPairId = persistedPair.getId();
+        pairDto.getCables().forEach(c -> c.setOwnerId(persistedPairId));
         eventPublisher.publishEvent(new PairBindingEvent(this, pairDto.getCables()));
         return persistedPair;
     }

@@ -81,17 +81,10 @@ public class Pair
     @Column(name="VERSION", columnDefinition = "int8")
     private Long version;
 
-    @ToString.Exclude
-    @OneToMany(mappedBy = "pair",
-            cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    /*@ToString.Exclude
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PairBinding> cables = new ArrayList<>();
-
-    public void setCables(final List<PairBinding> cables) {
-        this.cables = cables;
-        this.cables.forEach(c -> c.setPair(this));
-    }
-
-    //public String toString(Pair)
+*/
 }
 
 
